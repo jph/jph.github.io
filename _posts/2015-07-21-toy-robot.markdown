@@ -1,0 +1,12 @@
+---
+layout: post
+title:  "Robot Simulator Challenge"
+date:   2015-07-21 13:00:00
+categories: linux programming
+---
+
+I did the robot thing: [jph/robot]
+
+Next up, a pathfinding helper for the robot.
+
+[jph/robot]: https://www.github.com/jph/robot
