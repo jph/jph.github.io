@@ -3,6 +3,7 @@ layout: post
 title:  "ds4drv and Steam"
 date:   2015-07-19 09:00:00
 categories: linux programming
+minutes: 2
 ---
 
 I made a Steambox, and thought I'd publish the helper scripts I put together for the DS4 controller I use. There exists a project called [ds4drv], which is a very nice implementation of the DS4 API for Linux machines.
