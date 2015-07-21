@@ -40,7 +40,7 @@ And, to automate this, I've put together an upstart script. This will perform al
 
 {% highlight bash %}
 description "ds4-helper"
-start on startup
+start on runlevel [2345]
 
 pre-start script
   chmod 400 /dev/input/by-id/usb-Sony_Computer_Entertainment_Wireless_Controller-event-joystick
