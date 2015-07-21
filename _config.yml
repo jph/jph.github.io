@@ -13,14 +13,14 @@ google_analytics:
 animated:           true
 show_related_posts: false
 show_post_footers:  false
-show_social_icons:  false
+show_social_icons:  true
 
 # Disqus post comments
 # (leave blank to disable Disqus)
 disqus_shortname:
 
 # Social icons
-github_username:
+github_username: jph
 stackoverflow_id:
 twitter_username:
 google_plus_id:
@@ -50,7 +50,7 @@ markdown:     kramdown
 redcarpet:
   extensions: ['smart', 'tables', 'with_toc_data']
 permalink:    '/:year/:month/:title.html'
-paginate:     4
+paginate:     6
 sass:
   compressed: true
 gems:
