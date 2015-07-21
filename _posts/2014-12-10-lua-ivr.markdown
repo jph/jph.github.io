@@ -1,0 +1,53 @@
+---
+layout: post
+title:  "Asterisk/Lua: IVR"
+date:   2014-12-10 13:00:00
+categories: lua asterisk programming
+---
+Interactive Voice Response in Lua.
+
+{% highlight lua %}
+function ivr_main(context, ext)
+  -- two t-dest loops before a hangup/alternate route occurs
+  channel["ResponseTimeout"]:set(5)
+  if tonumber(channel["numTries"]:get()) < 2 then
+    channel["numTries"]:set(channel["numTries"]:get() + 1)
+    app.Background('custom/Sound')
+    app.WaitExten(5)
+  else
+    channel["numTries"]:set("0")
+    app.Goto("ivr","s","1")
+  end
+end
+
+function ivr_invalid(context, ext)
+  app.Playback('custom/invalid')
+  app.Goto("ivr","s","1")
+end
+
+function ivr_target(context, ext)
+  app.Playback("demo/congrats")
+  app.Hangup()
+end
+
+extensions = {
+  incoming = {
+    ["_X."] = function()
+      channel["numTries"]:set("0")
+      app.Goto("ivr","s","1")
+    end;
+  };
+
+  ivr = {
+    ["1"] = ivr_target,
+    s = ivr_main,
+    t = ivr_main,
+    i = ivr_invalid
+  };
+}
+{% endhighlight %}
+
+Using [Lua][lua] and [Asterisk][asterisk].
+
+[lua]: http://www.lua.org/
+[asterisk]: http://www.asterisk.org/
