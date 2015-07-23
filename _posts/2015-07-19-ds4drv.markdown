@@ -1,0 +1,52 @@
+---
+layout: post
+title:  "ds4drv and Steam"
+date:   2015-07-19 09:00:00
+categories: linux programming
+minutes: 2
+---
+
+I made a Steambox, and thought I'd publish the helper scripts I put together for the DS4 controller I use. There exists a project called [ds4drv], which is a very nice implementation of the DS4 API for Linux machines.
+
+This software is very easy to use, although it needs to be run as root, presumably to add a device to `/dev/input`:
+
+{% highlight bash %}
+~# ds4drv --emulate-xpad --led ff0000 --trackpad-mouse --battery-flash --hidraw
+{% endhighlight %}
+
+At this point, this is only working over USB. I've been having some problems with a cheap BT dongle. But the device appears (the input device named event16, the X-Box 360 Pad):
+
+{% highlight bash %}
+~$ evtest
+...
+Available devices:
+/dev/input/event14: Sony Computer Entertainment Wireless Controller
+/dev/input/event16: Microsoft X-Box 360 pad
+{% endhighlight %}
+
+The problem is that when both Big Picture and other XInput-compatible games enumerate the `/dev/input` devices looking for a controller, they all see the *Sony Computer Entertainment Wireless Controller* first. While this is easily fixed, I don't want to have to shell into my streaming machine every time I boot it.
+
+{% highlight bash %}
+~$ sudo chmod 400 /dev/input/event14
+~$ evtest
+...
+Available devices:
+/dev/input/event16: Microsoft X-Box 360 pad
+{% endhighlight %}
+
+Now, Big Picture and my other games will correctly bind to the XInput device.
+
+And, to automate this, I've put together an upstart script. This will perform all of the above when the machine boots, provided the controller is plugged in.
+
+{% highlight bash %}
+description "ds4-helper"
+start on runlevel [2345]
+
+pre-start script
+  chmod 400 /dev/input/by-id/usb-Sony_Computer_Entertainment_Wireless_Controller-event-joystick
+end script
+
+exec ds4drv --emulate-xpad --led ff0000 --trackpad-mouse --battery-flash --hidraw
+{% endhighlight %}
+
+[ds4drv]: https://github.com/chrippa/ds4drv
