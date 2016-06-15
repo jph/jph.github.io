@@ -9,17 +9,17 @@ Easy way to automate calls in both directions hitting a web API.
 {% highlight ruby %}
 require 'sinatra'
 
-get '/from/:ext/to/:outbound/:context'
+get '/from/:ext/to/:outbound/:context' do
   file = []
   file << "Channel: SIP/#{params[:ext]}"
   file << "MaxRetries: 2"
   file << "RetryTime: 60"
   file << "WaitTime: 30"
   file << "Context: #{params[:context]}"
-  file << "Extension: 0#{params[:outbound].gsub(/\s/,'')}"
+  file << "Extension: #{params[:outbound].gsub(/\s/,'')}"
   file << "Priority: 1"
 
-  File.open("./tempcall.call", "w") { |fh| fh.write file }
+  File.open("./tempcall.call", "w") { |fh| fh.write file.join("\n") }
 
   %x{mv ./tempcall.call /var/spool/asterisk/outgoing}
 end
