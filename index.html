@@ -2,23 +2,12 @@
 layout: default
 ---
 
-<div class="home">
-
-  <div class="posts">
+<ul>
     {% for post in paginator.posts %}
-      <div class="post py3">
-        <p class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</p>
-        <a href="{{ post.url | prepend: site.baseurl }}" class="post-link"><h3 class="h1 post-title">{{ post.title }}</h3></a>
-        <p class="post-summary">
-          {% if post.summary %}
-            {{ post.summary }}
-          {% else %}
-            {{ post.excerpt }}
-          {% endif %}
-        </p>
-      </div>
+      <li>
+          <h2><a href="{{ post.url | prepend: site.baseurl | replace: '//', '/' }}">{{ post.title }}</a></h2>
+          <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date_to_string }}</time>
+          <p>{{ post.content | strip_html | truncatewords:50 }}</p>
+      </li>
     {% endfor %}
-  </div>
-
-  {% include pagination.html %}
-</div>
+</ul>
